@@ -127,7 +127,7 @@ public class Pawn extends Piece {
 				moves.add(aux);
 			}
 		}
-		
+		/*
 		//en passant
 		Piece enPassant = X.getEnPassant();
 		if (X.hasEnPassant() && enPassant.getPlayer() != player)
@@ -167,7 +167,7 @@ public class Pawn extends Piece {
 				}
 			}
 		}
-		
+		*/
 		
 		return moves;
 	}

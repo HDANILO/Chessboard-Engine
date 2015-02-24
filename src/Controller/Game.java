@@ -187,7 +187,7 @@ public class Game {
 		}
 		catch(Exception E)
 		{
-			
+			E.printStackTrace();
 		}
 		
 		//MachineLearning ml = new MachineLearning();

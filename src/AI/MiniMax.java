@@ -93,13 +93,14 @@ public class MiniMax {
 				Node newNode = new Node(n.player*(-1),move);
 				alpha = Math.max(alpha, alphabeta(newNode,currDepth+1, player, alpha, beta));
 				newNode.value = alpha;
-				n.addChild(newNode);
+				
 				if (beta <= alpha)
 				{
 					this.cTotal += (movesList.size()-c);
 					//log.info("Beta cut-off: cutted " + (movesList.size()-c) + " movelists");
 					break;
 				}
+				n.addChild(newNode);
 			}
 			return alpha;
 		}
@@ -115,13 +116,13 @@ public class MiniMax {
 				Node newNode = new Node(n.player*(-1),move);
 				beta = Math.min(beta, alphabeta(newNode,currDepth+1, player, alpha, beta));
 				newNode.value = beta;
-				n.addChild(newNode);
 				if (beta <= alpha)
 				{
 					this.cTotal += (movesList.size()-c);
 					//log.info("Alpha cut-off: cutted " + (movesList.size()-c) + " moves");
 					break;
 				}
+				n.addChild(newNode);
 			}
 			
 			return beta;

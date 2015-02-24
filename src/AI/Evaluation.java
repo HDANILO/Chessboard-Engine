@@ -13,8 +13,6 @@ import Piece.*;
 public class Evaluation {
 	
 	static Logger log = Logger.getLogger("Chessboard");
-	
-	//static SMOreg Model;
 	static MultilayerPerceptron Model;
 	
 	public static long evaluate(Chessboard chess, int player)
@@ -51,13 +49,16 @@ public class Evaluation {
 		}
 		double evaluation = 0;
 		
-		try {
+		try 
+		{
 			evaluation = Model.classifyInstance(chessdata)/(3*player);
-			log.info("Regression Evaluated: " + evaluation);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			//log.info("Regression Evaluated: " + evaluation);
+		} 
+		catch (Exception e) 
+		{
 			e.printStackTrace();
 		}
+		
 		evaluation = Math.max(Math.min(3, evaluation),-3);
 		for(Square[] sqArr: chess.getChessboard())
 		{
@@ -68,10 +69,18 @@ public class Evaluation {
 					if (sq.piece.getPlayer() == player)
 					{
 						evaluation += sq.piece.Symbol();
+						
+						int dist = (int) ((1+0.1)/((Math.abs(sq.piece.getPosx() - 4) + Math.abs(sq.piece.getPosy() - 4))+0.1));
+						dist = dist*2;
+						evaluation += dist;
 					}
 					else
 					{
 						evaluation -= sq.piece.Symbol();
+						
+						int dist = (int) ((1+0.1)/((Math.abs(sq.piece.getPosx() - 4) + Math.abs(sq.piece.getPosy() - 4))+0.1));
+						dist = dist*2;
+						evaluation -= dist;
 					}
 				}
 			}

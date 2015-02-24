@@ -123,12 +123,12 @@ public class MachineLearning {
 								 float value = 0;
 								 if (chess[i].getChessboard()[x][y].hasPiece)
 									 value = chess[i].getChessboard()[x][y].piece.Representation();
-								 
+								 /*
 								 if (value > 0)
 									 value = Math.min(10, value);
 								 else
 									 value = Math.max(-10, value);
-								 
+								 */
 								 data.setValue((Attribute)fvWekaAttributes.elementAt(c), value);
 								 c++;
 							 }
@@ -182,6 +182,7 @@ public class MachineLearning {
 		model.setNormalizeAttributes(true);
 		model.setNormalizeNumericClass(true);
 		model.setTrainingTime(1000);
+		model.setDecay(true);
 		model.setGUI(true);
 		try {
 			model.buildClassifier(isTrainingSet);
