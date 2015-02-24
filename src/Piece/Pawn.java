@@ -27,6 +27,7 @@ public class Pawn extends Piece {
 			{
 				Chessboard aux = new Chessboard(X);
 				aux.movePiece(posx, posy, posx, posy+2);
+				aux.setPossibleEnPassant(true,posx,posy+2);
 				moves.add(aux);
 			}
 		}
@@ -36,6 +37,7 @@ public class Pawn extends Piece {
 			{
 				Chessboard aux = new Chessboard(X);
 				aux.movePiece(posx, posy, posx, posy-2);
+				aux.setPossibleEnPassant(true,posx,posy-2);
 				moves.add(aux);
 			}
 		}
@@ -47,20 +49,16 @@ public class Pawn extends Piece {
 			if (posy+1 == 7 && !X.hasPiece(posx, posy+1))
 			{
 				Chessboard aux = new Chessboard(X);
-				aux.getChessboard()[posx][posy].removePiece();
-				aux.getChessboard()[posx][posy+1].putPiece(new Queen(posx,posy+1,player));
+				aux.movePiece(posx, posy, posx, posy+1,'q');
 				moves.add(aux);
 				aux = new Chessboard(X);
-				aux.getChessboard()[posx][posy].removePiece();
-				aux.getChessboard()[posx][posy+1].putPiece(new Knight(posx,posy+1,player));
+				aux.movePiece(posx, posy, posx, posy+1,'n');
 				moves.add(aux);
 				aux = new Chessboard(X);
-				aux.getChessboard()[posx][posy].removePiece();
-				aux.getChessboard()[posx][posy+1].putPiece(new Rook(posx,posy+1,player));
+				aux.movePiece(posx, posy, posx, posy+1,'r');
 				moves.add(aux);
 				aux = new Chessboard(X);
-				aux.getChessboard()[posx][posy].removePiece();
-				aux.getChessboard()[posx][posy+1].putPiece(new Bishop(posx,posy+1,player));
+				aux.movePiece(posx, posy, posx, posy+1,'b');
 				moves.add(aux);
 			}//else normal move
 			else if (!X.hasPiece(posx, posy+1))
@@ -96,6 +94,7 @@ public class Pawn extends Piece {
 			}
 		}
 		
+		//normal kill
 		if (player > 0)
 		{
 			if (X.hasPiece(posx+1, posy+1) && X.getPiece(posx+1, posy+1).player != player)
@@ -128,6 +127,47 @@ public class Pawn extends Piece {
 				moves.add(aux);
 			}
 		}
+		
+		//en passant
+		Piece enPassant = X.getEnPassant();
+		if (X.hasEnPassant() && enPassant.getPlayer() != player)
+		{
+			if (player > 0)
+			{
+				if (enPassant.getPosx() == posx-1)
+				{
+					Chessboard aux = new Chessboard(X);
+					aux.getChessboard()[enPassant.getPosx()][enPassant.getPosy()].removePiece();
+					aux.movePiece(posx, posy, posx-1, posy+1);
+					moves.add(aux);
+				}
+				else if (enPassant.getPosx() == posx+1)
+				{
+					Chessboard aux = new Chessboard(X);
+					aux.getChessboard()[enPassant.getPosx()][enPassant.getPosy()].removePiece();
+					aux.movePiece(posx, posy, posx+1, posy+1);
+					moves.add(aux);
+				}
+			}
+			else
+			{
+				if (enPassant.getPosx() == posx-1)
+				{
+					Chessboard aux = new Chessboard(X);
+					aux.getChessboard()[enPassant.getPosx()][enPassant.getPosy()].removePiece();
+					aux.movePiece(posx, posy, posx-1, posy-1);
+					moves.add(aux);
+				}
+				else if (enPassant.getPosx() == posx+1)
+				{
+					Chessboard aux = new Chessboard(X);
+					aux.getChessboard()[enPassant.getPosx()][enPassant.getPosy()].removePiece();
+					aux.movePiece(posx, posy, posx+1, posy-1);
+					moves.add(aux);
+				}
+			}
+		}
+		
 		
 		return moves;
 	}

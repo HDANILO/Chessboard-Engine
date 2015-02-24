@@ -10,7 +10,29 @@ public class Chessboard{
 	Square[][] chessboard;
 	Logger log = Logger.getLogger("Chessboard");
 	String lastMove;
+	boolean possibleEnPassant;
+	int enPassantX, enPassantY;
 	
+	public boolean hasEnPassant()
+	{
+		return possibleEnPassant;
+	}
+	
+	public Piece getEnPassant() {
+		if(possibleEnPassant)
+		{
+			return chessboard[enPassantX][enPassantY].piece;
+		}
+		else
+			return null;
+	}
+
+	public void setPossibleEnPassant(boolean possibleEnPassant, int enPassantX, int enPassantY) {
+		this.enPassantX = enPassantX;
+		this.enPassantY = enPassantY;
+		this.possibleEnPassant = possibleEnPassant;
+	}
+
 	public String getLastMove() {
 		return lastMove;
 	}
@@ -25,6 +47,8 @@ public class Chessboard{
 
 	public Chessboard(Chessboard copy)
 	{
+		lastMove = "";
+		possibleEnPassant = false;
 		chessboard = new Square[8][8];
 		for(int i = 0; i < 8; i++)
 		{
@@ -37,6 +61,8 @@ public class Chessboard{
 	
 	public Chessboard()
 	{
+		lastMove = "";
+		possibleEnPassant = false;
 		chessboard = new Square[8][8];
 		for (int i = 0; i < 8; i++)
 		{
@@ -146,6 +172,21 @@ public class Chessboard{
 			((King)p).setMoved();
 		
 		chessboard[toX][toY].putPiece(p);
+		
+		//En Passant, must test
+		if (p instanceof Pawn && this.hasEnPassant())
+		{
+			Piece enPassant = chessboard[enPassantX][enPassantY].piece;
+			if (enPassant.getPosx() == toX && enPassant.getPlayer() != p.getPlayer())
+			{
+				chessboard[toX][fromY].removePiece();
+			}
+		}
+		else if(p instanceof Pawn && Math.abs(toY-fromY) == 2)
+		{
+			this.setPossibleEnPassant(true, toX, toY);
+		}
+		
 		String f1, t1;
 		f1 = (char)(fromX + 97) + "";
 		t1 = (char)(toX + 97) + "";

@@ -69,8 +69,10 @@ public class Game {
 				cplayer*=-1;
 				response = sc.nextLine();
 			}
+			
 			boolean dumping = true;
 			boolean playing = false;
+			
 			while(dumping)
 			{
 				response = br.readLine();
